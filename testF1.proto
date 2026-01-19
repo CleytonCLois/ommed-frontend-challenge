@@ -1,0 +1,199 @@
+syntax = "proto3";
+
+option csharp_namespace = "Ommed.TestF1Service.Grpc.Protos";
+
+package testF1Api;
+
+service TestF1ProtoService {
+	rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+	rpc Login(LoginRequest) returns (LoginResponse);
+	rpc ListCouncils(EmptyRequest) returns (ListCouncilResponse);
+	rpc ListBasicInformation(EmptyRequest) returns (ListBasicInformationResponse);
+	rpc AddCouncil(AddCouncilRequest) returns (AddCouncilResponse);
+	rpc DeleteCouncil(DeleteCouncilRequest) returns (Response);
+	rpc GetFullUserInfo(GetFullUserInfoRequest) returns (GetFullUserInfoResponse);
+	rpc DeleteUser(DeleteUserRequest) returns (Response);
+	rpc GetRegistry (GetRegistryRequest) returns (GetRegistryResponse);
+	rpc ListProfessions(EmptyRequest) returns (ListProfessionsResponse);
+}
+
+message ListProfessionsResponse {
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+	repeated ProfessionProto professions = 4; 
+}
+
+message ProfessionProto {
+	string profession = 1;
+	string council_description = 2;
+	string council_acronym = 3;
+}
+
+message DeleteUserRequest {
+	string email = 1;
+	string date_birth = 2;
+}
+
+message GetFullUserInfoRequest {
+}
+
+message GetFullUserInfoResponse {
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+	CompleteUserProto user = 4;
+}
+
+message CompleteUserProto {
+	string user_id = 1;
+	string first_name = 2;
+    string last_name = 3;
+    string date_birth = 4;
+    string email = 5;
+    string DDI = 6;
+    string phone = 7;
+	repeated RegistryCouncilProto councils = 8;
+}
+
+message CreateUserRequest {
+	string first_name = 1;
+	string last_name = 2;
+	string date_birth = 3; //ISO 8601
+	string ddi = 4;
+	string phone = 5;
+	string email = 6;
+	string password = 7;
+}
+
+message CreateUserResponse{
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+}
+
+message LoginRequest {
+	string email = 1;
+	string password = 2;	
+}
+
+message LoginResponse{
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+}
+
+message EmptyRequest {
+}
+
+message ListCouncilResponse {
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+	repeated RegistryCouncilProto registries = 4;
+}
+
+message ActionActuationProtoResponse {
+	string action_actuation_id = 1;
+	string speciality_id = 2;
+	string rqe_number = 3;
+	string description = 4;
+	int32 exclusive = 5;
+}
+
+message SpecialityProtoResponse {
+	string speciality_id = 1;
+	string rqe_number = 2;
+	string description = 3;
+	repeated ActionActuationProtoResponse actuations = 4;
+}
+
+message RegistryCouncilProto {
+	string council_id = 1;
+	string user_id = 2;
+	string professional_name = 3;
+	string state = 4;
+	string number = 5;
+	string description = 6;
+	string subscription_type = 7;
+	string status = 8;
+	repeated SpecialityProtoResponse specialities = 9;
+}
+
+message ActionActuationProto {
+	string rqe_number = 1;
+	string description = 2;
+	int32 exclusive = 3;
+}
+
+message SpecialityProto {
+	string rqe_number = 1;
+	string description = 2;
+	repeated ActionActuationProto actuations = 3;
+}
+
+message BasicInformationProto {
+	string user_id = 1;
+	string first_name = 2;
+    string last_name = 3;
+    string date_birth = 4;
+    string email = 5;
+    string DDI = 6;
+    string phone = 7;
+}
+
+message ListBasicInformationResponse {
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+	BasicInformationProto Information = 4;
+}
+
+message AddCouncilRequest {
+	string professional_name = 1;
+	string council = 2;
+	string state = 3;
+	string number = 4;
+	string description = 5;
+	//only CRM
+	string subscription_type = 6;
+	string status = 7;
+	repeated SpecialityProto specialities = 8;
+}
+
+message AddCouncilResponse {
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+}
+
+message DeleteCouncilRequest {
+	string council_id = 1;
+}
+
+message Response {
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+}
+
+message GetRegistryRequest{
+	int32 number = 1;
+	string state = 2;
+}
+
+message GetRegistryResponse {
+	bool success = 1;
+	string data = 2;
+	string message = 3;
+	RegistryCouncilProtoResponse registry = 4;
+}
+
+message RegistryCouncilProtoResponse {
+	string state = 1;
+	string number = 2;
+	string professional_name = 3;
+	string subscription_type = 4;
+	string status = 5;
+	repeated SpecialityProtoResponse specialities = 6;
+}
